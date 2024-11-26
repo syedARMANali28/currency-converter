@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <form id="converter-form">
+            <label for="From">From Currency:</label>
+            <select id="From" name="From">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="INR">INR</option>
+                <option value="PKR">PKR</option>
+            </select>
+
+            <label for="To">To Currency:</label>
+            <select id="To" name="To">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="INR">INR</option>
+                <option value="PKR">PKR</option>
+            </select>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" placeholder="10000" required>
+            <button type="submit">Convert</button>
+        </form>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const currency = {
+            USD: 1,
+            EUR: 0.91,
+            GBP: 0.76,
+            INR: 74.57,
+            PKR: 280
+        };
+
+        document.getElementById('converter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let fromCurrency = document.getElementById('From').value;
+            let toCurrency = document.getElementById('To').value;
+            let amount = parseFloat(document.getElementById('amount').value);
+
+            if (isNaN(amount) || amount <= 0) {
+                document.getElementById('result').textContent = 'Please enter a valid amount.';
+                return;
+            }
+
+            let fromAmount = currency[fromCurrency];
+            let toAmount = currency[toCurrency];
+            let baseAmount = amount / fromAmount;
+            let convertedAmount = baseAmount * toAmount;
+
+            document.getElementById('result').textContent = 
+                `Converted Amount: ${Math.round(convertedAmount * 100) / 100} ${toCurrency}`;
+
+            // Trigger confetti after conversion
+            triggerConfetti();
+        });
+
+        // Confetti function
+        function triggerConfetti() {
+            // Confetti from the left side
+            confetti({
+                particleCount: 100, 
+                angle: 60, // angle of confetti
+                spread: 55, // spread of confetti
+                origin: { x: 0 } // starts from the left
+            });
+
+            // Confetti from the right side
+            confetti({
+                particleCount: 100, 
+                angle: 120, // angle of confetti
+                spread: 55, // spread of confetti
+                origin: { x: 1 } // starts from the right
+            });
+        }
+    </script>
+</body>
+</html>
